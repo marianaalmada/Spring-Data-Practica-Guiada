@@ -3,9 +3,11 @@ package com.informatorio.moviesfest.domain;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Film {
@@ -19,11 +21,15 @@ public class Film {
     private String description;
 
     private LocalDate creationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
     
-    public Film(String title, String description, LocalDate creationDate) {
+    public Film(String title, String description, LocalDate creationDate, Category category) {
         this.title = title;
         this.description = description;
         this.creationDate = creationDate;
+        this.category = category;
     }
 
     public Long getId() {
@@ -56,6 +62,14 @@ public class Film {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
