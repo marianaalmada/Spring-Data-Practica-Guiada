@@ -33,7 +33,7 @@ public class FilmController {
     }
 
     @PostMapping("/film/{filmId}/actor")
-    public Film addActorToMovie(@PathVariable Long filmId, @RequestBody List<Long> ActorsId) {
+    public String addActorToMovie(@PathVariable Long filmId, @RequestBody List<Long> ActorsId) {
         Film film = filmRepository.findById(filmId).orElse(null);
         List<Actor> actors = ActorsId.stream()
                 .map(id -> actorRepository.findById(id))
@@ -42,6 +42,19 @@ public class FilmController {
                 .collect(Collectors.toList()); 
         actors.forEach(actor -> film.addActor(actor));
         filmRepository.save(film);
-        return film;
+        return "OK";
     }
+
+    /*@PostMapping("/film/{filmId}/director")
+    public String addActorToMovie(@PathVariable Long filmId, @RequestBody List<Long> ActorsId) {
+        Film film = filmRepository.findById(filmId).orElse(null);
+        List<Actor> actors = ActorsId.stream()
+                .map(id -> actorRepository.findById(id))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList()); 
+        actors.forEach(actor -> film.addActor(actor));
+        filmRepository.save(film);
+        return "OK";
+    }*/
 }

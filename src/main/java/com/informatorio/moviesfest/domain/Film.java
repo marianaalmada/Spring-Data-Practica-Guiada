@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Film {
@@ -38,12 +39,22 @@ public class Film {
         inverseJoinColumns = @JoinColumn(name = "actor_id")
         )
     private Set<Actor> actors = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "director_id", referencedColumnName = "id")
+    private Director director;
     
-    public Film(String title, String description, LocalDate creationDate, Category category) {
+    public Film(String title, String description, LocalDate creationDate, Category category, Set<Actor> actors,
+            Director director) {
         this.title = title;
         this.description = description;
         this.creationDate = creationDate;
         this.category = category;
+        this.actors = actors;
+        this.director = director;
+    }
+
+    public Film() {
     }
 
     public Long getId() {
@@ -95,12 +106,25 @@ public class Film {
         actor.getFilms().add(this);
     } 
 
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
     @Override
     public String toString() {
-        return "Film [creationDate=" + creationDate + 
+        return "Film [actors=" + actors + 
+            ", category=" + category + 
+            ", creationDate=" + creationDate + 
             ", description=" + description + 
+            ", director=" + director + 
             ", id=" + id + 
             ", title=" + title + 
             "]";
     }
+
+    
 }
